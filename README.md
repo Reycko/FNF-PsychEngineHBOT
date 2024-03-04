@@ -4,5 +4,6 @@ Saw this horrible shit I made back in 2022 and decided to remake it but way bett
 Adds a new HBot tab to the settings.
 
 ## TODO:
-- Code a legit looking strum glow
+- Code a legit looking strum glow (kinda done)
 - Do something to be able to quickly port to new updates
+- Untie strum glow to playback rate (might make that an option)

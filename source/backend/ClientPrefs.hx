@@ -85,6 +85,8 @@ import states.TitleState;
 	public var cpuMinVariance:Float = 0.0;
 	public var cpuMaxVariance:Float = 0.0;
 	public var cpuSeedGenType:Bool = false;
+	public var cpuLegitStrumGlow:Float = 1.0;
+	public var cpuAllowHighscores:Bool = false;
 }
 
 class ClientPrefs {

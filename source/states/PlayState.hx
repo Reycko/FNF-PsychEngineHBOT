@@ -210,6 +210,8 @@ class PlayState extends MusicBeatState
 	public var cpuNextVariance:Float = 0.0;
 	public var cpuSeedGenType:Bool = false;
 	public var cpuSeed:FlxRandom = new FlxRandom();
+	public var cpuLegitStrumGlow:Float = 0.0; // This is = to the glow multiplier, this is the old name for it
+	public var cpuAllowHighscores:Bool = false;
 
 	// Couldn't find a good spot to put this func in
 	private function genCpuVariance(min:Float, max:Float) 
@@ -327,6 +329,8 @@ class PlayState extends MusicBeatState
 		cpuMinVariance = ClientPrefs.data.cpuMinVariance;
 		cpuMaxVariance = ClientPrefs.data.cpuMaxVariance;
 		cpuNextVariance = genCpuVariance(cpuMinVariance, cpuMaxVariance);
+		cpuLegitStrumGlow = ClientPrefs.data.cpuLegitStrumGlow;
+		cpuAllowHighscores = ClientPrefs.data.cpuAllowHighscores;
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = initPsychCamera();
@@ -2364,7 +2368,8 @@ class PlayState extends MusicBeatState
 			#if !switch
 			var percent:Float = ratingPercent;
 			if(Math.isNaN(percent)) percent = 0;
-			Highscore.saveScore(SONG.song, songScore, storyDifficulty, percent);
+			if (!cpuControlled || (cpuControlled && cpuAllowHighscores))
+				Highscore.saveScore(SONG.song, songScore, storyDifficulty, percent);
 			#end
 			playbackRate = 1;
 
@@ -2376,8 +2381,11 @@ class PlayState extends MusicBeatState
 
 			if (isStoryMode)
 			{
-				campaignScore += songScore;
-				campaignMisses += songMisses;
+				if (!cpuControlled || (cpuControlled && cpuAllowHighscores))
+				{
+					campaignScore += songScore;
+					campaignMisses += songMisses;
+				}
 
 				storyPlaylist.remove(storyPlaylist[0]);
 
@@ -2390,7 +2398,7 @@ class PlayState extends MusicBeatState
 					MusicBeatState.switchState(new StoryMenuState());
 
 					// if ()
-					if(!ClientPrefs.getGameplaySetting('practice') && !ClientPrefs.getGameplaySetting('botplay')) {
+					if(!ClientPrefs.getGameplaySetting('practice') && (!ClientPrefs.getGameplaySetting('botplay') || (ClientPrefs.getGameplaySetting('botplay') && cpuAllowHighscores))) {
 						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyWeek], true);
 						Highscore.saveWeekScore(WeekData.getWeekFileName(), campaignScore, storyDifficulty);
 
@@ -3022,7 +3030,7 @@ class PlayState extends MusicBeatState
 			var spr = playerStrums.members[note.noteData];
 			if(spr != null) spr.playAnim('confirm', true);
 		}
-		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
+		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), (Conductor.stepCrochet * 1.25 * cpuLegitStrumGlow) / 1000 / playbackRate); //TODO: MORE RANDOMIZATION :money_mouth:
 		vocals.volume = 1;
 
 		if (!note.isSustainNote)

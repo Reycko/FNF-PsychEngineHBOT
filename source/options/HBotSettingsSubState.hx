@@ -48,7 +48,8 @@ class HBotSettingsSubState extends BaseOptionsMenu
             null, null, null, null, null, "%vms", "%vms", null
         ];
 
-        for (i in 0...optionSaveDataName.indexOf('cpuAllowAchivements')) // We're adding the next 2 manually beacuse they SUCK.
+        //TODO: Stop using arrays w/ loops, that was a shit idea
+        for (i in 0...optionSaveDataName.indexOf('cpuAllowAchivements')) // We're adding the next 2 after that manually beacuse they SUCK.
         {
             var name = optionNames[i];
             var desc = optionDescriptions[i];
@@ -89,6 +90,25 @@ class HBotSettingsSubState extends BaseOptionsMenu
 
             addOption(new Option(name, desc, saveName, saveType));
         }
+
+        var opt:Option = new Option(
+            'Strum Glow Multiplier',
+            'Changes the multiplier for the strum glow.',
+            'cpuLegitStrumGlow',
+            'float',
+        );
+        opt.displayFormat = '%vx';
+        opt.scrollSpeed = 10;
+        opt.changeValue = 0.1;
+        addOption(opt);
+
+        var opt:Option = new Option(
+            'Allow high scores',
+            'If true => Allows saving scores on campaign and freeplay/individual songs.\nOnly applies when botplay is on.',
+            'cpuAllowHighscores',
+            'bool'
+        );
+        addOption(opt);
 
         super();
     }
