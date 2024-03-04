@@ -100,6 +100,8 @@ class HBotSettingsSubState extends BaseOptionsMenu
         opt.displayFormat = '%vx';
         opt.scrollSpeed = 10;
         opt.changeValue = 0.1;
+        opt.minValue = 0.0;
+        opt.maxValue = 10.0;
         addOption(opt);
 
         var opt:Option = new Option(
