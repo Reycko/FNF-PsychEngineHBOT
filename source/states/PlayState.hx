@@ -3030,7 +3030,16 @@ class PlayState extends MusicBeatState
 			var spr = playerStrums.members[note.noteData];
 			if(spr != null) spr.playAnim('confirm', true);
 		}
-		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), (Conductor.stepCrochet * 1.25 * (note.isSustainNote ? 1 : cpuLegitStrumGlow)) / 1000 / playbackRate); //TODO: MORE RANDOMIZATION :money_mouth:
+		else 
+		{
+			var time:Float = Conductor.stepCrochet * 1.25;
+			if (!note.isSustainNote)
+			{
+				time *= cpuLegitStrumGlow;
+			}
+			time /= 1000 / playbackRate;
+			strumPlayAnim(false, Std.int(Math.abs(note.noteData)), time); //TODO: MORE RANDOMIZATION :money_mouth:
+		}
 		vocals.volume = 1;
 
 		if (!note.isSustainNote)
